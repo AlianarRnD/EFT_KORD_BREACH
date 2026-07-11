@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KORD BREACH — Калькулятор билдов</title>
+<style>
+  :root{
+    --bg:#0d0f12;
+    --panel:#161a1f;
+    --panel2:#1e242b;
+    --line:#2c333c;
+    --text:#d7dde3;
+    --muted:#8a949e;
+    --amber:#e6a817;
+    --green:#5fbf6a;
+    --red:#e0584f;
+    --green-dim:#1f3324;
+    --red-dim:#3a211f;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--text);
+    font-family:"Segoe UI",Roboto,system-ui,sans-serif;
+    line-height:1.4;
+  }
+  header{
+    background:linear-gradient(180deg,#11151a,#0d0f12);
+    border-bottom:2px solid var(--amber);
+    padding:18px 22px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    flex-wrap:wrap;
+    gap:12px;
+  }
+  header h1{
+    margin:0;
+    font-size:22px;
+    letter-spacing:2px;
+    text-transform:uppercase;
+    color:#fff;
+  }
+  header h1 span{color:var(--amber);}
+  .counter{
+    background:var(--panel2);
+    border:1px solid var(--line);
+    border-radius:8px;
+    padding:10px 16px;
+    text-align:center;
+    min-width:200px;
+  }
+  .counter .label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;}
+  .counter .value{font-size:28px;font-weight:700;color:var(--amber);}
+  .counter .sub{font-size:11px;color:var(--muted);}
+  .layout{
+    display:grid;
+    grid-template-columns:1fr 380px;
+    gap:18px;
+    padding:18px 22px;
+    align-items:start;
+  }
+  @media(max-width:900px){
+    .layout{grid-template-columns:1fr;}
+  }
+  .section{margin-bottom:22px;}
+  .section h2{
+    font-size:14px;
+    text-transform:uppercase;
+    letter-spacing:1.5px;
+    margin:0 0 10px;
+    padding-bottom:6px;
+    border-bottom:1px solid var(--line);
+    color:var(--muted);
+  }
+  .section.positive h2{color:var(--green);border-color:var(--green-dim);}
+  .section.negative h2{color:var(--red);border-color:var(--red-dim);}
+  .grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
+    gap:12px;
+  }
+  .card{
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:8px;
+    padding:12px 14px;
+    cursor:pointer;
+    position:relative;
+    transition:border-color .15s,background .15s,transform .05s;
+    user-select:none;
+  }
+  .card:hover{border-color:#3d4753;}
+  .card.general{cursor:default;background:var(--panel2);}
+  .card.selected{border-color:var(--amber);background:#1c2026;}
+  .card.positive.selected{border-color:var(--green);background:var(--green-dim);}
+  .card.negative.selected{border-color:var(--red);background:var(--red-dim);}
+  .card.disabled{opacity:.45;cursor:not-allowed;}
+  .card .name{font-weight:600;font-size:15px;margin-bottom:4px;padding-right:54px;}
+  .card .desc{font-size:12.5px;color:var(--muted);}
+  .card .badge{
+    position:absolute;
+    top:10px;right:10px;
+    font-size:13px;font-weight:700;
+    padding:2px 8px;border-radius:6px;
+    background:var(--panel2);
+    border:1px solid var(--line);
+  }
+  .card.positive .badge{color:var(--green);border-color:var(--green-dim);}
+  .card.negative .badge{color:var(--red);border-color:var(--red-dim);}
+  .card.general .badge{color:var(--muted);}
+  .check{
+    position:absolute;
+    bottom:10px;right:10px;
+    width:18px;height:18px;
+    border:1px solid var(--line);
+    border-radius:4px;
+    background:var(--bg);
+  }
+  .card.selected .check{background:var(--amber);border-color:var(--amber);}
+  .card.general .check{background:var(--amber);border-color:var(--amber);}
+
+  aside{
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:16px;
+    position:sticky;
+    top:18px;
+  }
+  aside h2{font-size:14px;text-transform:uppercase;letter-spacing:1.5px;margin:0 0 12px;color:var(--muted);}
+  .sel-list{list-style:none;margin:0;padding:0;max-height:340px;overflow:auto;}
+  .sel-list li{
+    display:flex;justify-content:space-between;gap:8px;
+    padding:7px 14px 7px 0;border-bottom:1px solid var(--line);font-size:13px;
+  }
+  .sel-list li .pts{font-weight:700;white-space:nowrap;}
+  .sel-list li.pos .pts{color:var(--green);}
+  .sel-list li.neg .pts{color:var(--red);}
+  .sel-empty{color:var(--muted);font-size:13px;font-style:italic;}
+  .btns{display:flex;gap:8px;margin-top:14px;}
+  .btns button{
+    flex:1;padding:9px;border-radius:7px;border:1px solid var(--line);
+    background:var(--panel2);color:var(--text);cursor:pointer;font-size:13px;
+    text-transform:uppercase;letter-spacing:1px;
+  }
+  .btns button:hover{border-color:var(--amber);color:#fff;}
+  .toast{
+    position:fixed;left:50%;bottom:24px;transform:translateX(-50%);
+    background:#2a1d1c;border:1px solid var(--red);color:#ffb4ae;
+    padding:10px 18px;border-radius:8px;font-size:13px;opacity:0;
+    transition:opacity .2s;pointer-events:none;
+  }
+  .toast.show{opacity:1;}
+  footer{padding:0 22px 30px;color:var(--muted);font-size:11px;}
+</style>
+</head>
+<body>
+<header>
+  <h1>KORD <span>BREACH</span> — Калькулятор билдов</h1>
+  <div class="counter">
+    <div class="label">Доступно поинтов</div>
+    <div class="value" id="pointsValue">0</div>
+    <div class="sub" id="pointsSub">накоплено 0 / потрачено 0</div>
+  </div>
+</header>
+
+<div class="layout">
+  <main>
+    <div class="section" id="sec-general">
+      <h2>Общие модификаторы (всегда активны)</h2>
+      <div class="grid" id="grid-general"></div>
+    </div>
+    <div class="section positive" id="sec-positive">
+      <h2>Личные положительные (тратят поинты)</h2>
+      <div class="grid" id="grid-positive"></div>
+    </div>
+    <div class="section negative" id="sec-negative">
+      <h2>Личные отрицательные (дают поинты)</h2>
+      <div class="grid" id="grid-negative"></div>
+    </div>
+  </main>
+
+  <aside>
+    <h2>Выбранные перки</h2>
+    <ul class="sel-list" id="selList"></ul>
+    <div class="btns">
+      <button id="btnReset">Сбросить</button>
+      <button id="btnSave">Сохранить</button>
+    </div>
+  </aside>
+</div>
+
+<footer>
+  Значения модификаторов могут быть изменены до старта сезона в балансировочных целях.
+</footer>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const PERKS = [
+  {id:'no_insurance', name:'НЕРАБОТАЮЩАЯ СТРАХОВКА', group:'general', points:0, desc:'Нельзя страховать предметы у торговцев.'},
+  {id:'deficit_armor', name:'ДЕФИЦИТ БРОНИ', group:'general', points:0, desc:'В Таркове наблюдается дефицит брони у торговцев.'},
+  {id:'black_division', name:'BLACK DIVISION', group:'general', points:0, desc:'Бойцы подразделения Black Division встречаются на локациях.'},
+  {id:'hideout_no_fir', name:'УБЕЖИЩЕ БЕЗ FIR', group:'general', points:0, desc:'Постройка модулей в Убежище не требуют статуса «Найдено в рейде» у предметов.'},
+  {id:'master', name:'НА ВСЕ РУКИ МАСТЕР', group:'general', points:0, desc:'Время крафта сокращено на 50%. Умение «Ручное производство» по умолчанию 51 уровня.'},
+  {id:'experienced_pmc', name:'ОПЫТНЫЕ ЧВК', group:'general', points:0, desc:'Персонаж получает на 25% больше опыта за рейд.'},
+
+  {id:'locksmith', name:'МЕДВЕЖАТНИК', group:'positive', points:-6, desc:'При использовании механического ключа есть 20% шанс, что он не потеряет прочность.'},
+  {id:'bushborn', name:'КУСТОРОЖДЕННЫЙ', group:'positive', points:-5, desc:'Задевание веток, травы и кустов вызывает на 50% меньше шума и замедления.'},
+  {id:'juice', name:'THE JUICE TIME', group:'positive', points:-2, desc:'При употреблении соков вы получаете эффект «На болеутоляющих» на 60 секунд.'},
+  {id:'businessman', name:'БИЗНЕСМЕН', group:'positive', points:-1, desc:'Один раз в неделю вы получаете откаты за крышевание над некоторыми Дикими.'},
+  {id:'sailor', name:'НОСТАЛЬГИЯ МОРЯКА', group:'positive', points:-2, desc:'При употреблении рыбных консервов персонаж получает эффект «Регенерация здоровья» (+2) на 10 секунд.'},
+  {id:'tarkov_shooter', name:'ТАРКОВСКИЙ СТРЕЛОК', group:'positive', points:-3, desc:'Увеличивает скорость прокачки навыков болтовых винтовок на 100%. Стартовое значение умения «Болтовые винтовки» — 10 уровень.'},
+  {id:'youth', name:'МОЛОДОСТЬ', group:'positive', points:-3, desc:'Энергия тратится на 20% медленнее. Выносливость рук и ног выше на 10 единиц.'},
+  {id:'diet', name:'ДИЕТА', group:'positive', points:-1, desc:'Трата ресурса всей провизии меньше на 50%.'},
+  {id:'hercules', name:'ГЕРКУЛЕС', group:'positive', points:-3, desc:'Стартовая «Сила» и «Выносливость» выше на 15 уровней.'},
+  {id:'hypodipsia', name:'ГИПОДИПСИЯ', group:'positive', points:-2, desc:'Гидратация тратится на 15% медленнее.'},
+  {id:'middle', name:'СЕРЕДНЯЧОК', group:'positive', points:-10, desc:'Все умения со старта 25 уровня. Максимальный уровень всех умений — 25.'},
+  {id:'sprinter', name:'СПРИНТЕР', group:'positive', points:-2, desc:'Скорость бега персонажа выше на 5%.'},
+  {id:'polyphagia', name:'ПОЛИФАГИЯ', group:'positive', points:-2, desc:'Энергия тратится на 15% медленнее.'},
+  {id:'kappa', name:'KAPPA PROTOCOL', group:'positive', points:-21, desc:'Вы получаете Защищенный контейнер «Каппа» со старта.'},
+  {id:'thrombophilia', name:'ТРОМБОФИЛИЯ', group:'positive', points:-2, desc:'Шанс получить кровотечение уменьшается на 25%.'},
+  {id:'strong_bones', name:'КРЕПКИЕ КОСТИ', group:'positive', points:-3, desc:'Шанс сломать любую из конечностей уменьшается на 15%. Падение с высоты наносит на 15% меньше урона.'},
+  {id:'marathon', name:'МАРАФОНЕЦ', group:'positive', points:-3, desc:'Выносливость рук и ног тратится на 15% медленнее.'},
+
+  {id:'osteoporosis', name:'ОСТЕОПОРОЗ', group:'negative', points:3, desc:'Шанс сломать любую конечность выше на 15%. Падение с высоты наносит на 15% больше урона.'},
+  {id:'ouch', name:'АЙ, БОЛИТ!', group:'negative', points:2, desc:'Ресурс всех аптечек тратится на 25% сильнее.'},
+  {id:'fatigue', name:'СИНДРОМ ХРОНИЧЕСКОЙ УСТАЛОСТИ', group:'negative', points:1, desc:'Энергия тратится на 15% быстрее.'},
+  {id:'allergic', name:'АЛЛЕРГИК', group:'negative', points:3, desc:'У персонажа есть аллергия на 2 случайных предмета из провизии или медицинских препаратов.'},
+  {id:'vanity', name:'БОЛЬШОЕ ДОСТОИНСТВО', group:'negative', points:1, desc:'Скорость бега меньше на 1%. Стоимость предметов у Терапевта меньше на 5%.'},
+  {id:'hemophilia', name:'ГЕМОФИЛИЯ', group:'negative', points:2, desc:'Шанс получить кровотечение увеличивается на 25%.'},
+  {id:'unteachable', name:'НЕОБУЧАЕМЫЙ', group:'negative', points:4, desc:'Получение опыта для умений уменьшено на 25% (кроме умения «Болтовые Винтовки»). Максимальный уровень умений 30 (кроме умения «Ручное производство»).'},
+  {id:'nosenose', name:'КАРЛИК НОС', group:'negative', points:2, desc:'Умение «Харизма» не прокачивается. Стоимость ассортимента всех торговцев выше на 20%.'},
+  {id:'exhaustion', name:'ИСТОЩЕНИЕ', group:'negative', points:4, desc:'Выносливость рук и ног восстанавливается на 15% медленнее. Выносливость рук и ног меньше на 10 единиц.'},
+  {id:'polydipsia', name:'ПОЛИДИПСИЯ', group:'negative', points:1, desc:'Гидратация тратится на 15% быстрее.'},
+  {id:'doctor', name:'ДОКТОР ДЖЕКИЛ', group:'negative', points:1, desc:'Эффект «Свежие раны» остается до конца рейда.'},
+  {id:'broken_kappa', name:'СЛОМАННЫЙ ЗАЩИЩЁННЫЙ КОНТЕЙНЕР', group:'negative', points:4, desc:'Защищенный контейнер ограничен деньгами, ключами, жетонами, спецоборудованием и некоторыми контейнерами.'},
+  {id:'no_flea', name:'НЕРАБОТАЮЩАЯ БАРАХОЛКА', group:'negative', points:6, desc:'Торговля на Барахолке с другими игроками недоступна.'}
+];
+
+const STORE_KEY = 'kord_breach_build';
+const selected = new Set();
+
+try{
+  const saved = JSON.parse(localStorage.getItem(STORE_KEY) || '[]');
+  saved.forEach(id => { if(PERKS.some(p=>p.id===id)) selected.add(id); });
+}catch(e){}
+
+function perk(id){ return PERKS.find(p=>p.id===id); }
+
+function available(){
+  let a = 0;
+  selected.forEach(id => { const p = perk(id); if(p && p.points > 0) a += p.points; });
+  return a;
+}
+function spent(){
+  let s = 0;
+  selected.forEach(id => { const p = perk(id); if(p && p.points < 0) s += -p.points; });
+  return s;
+}
+function remaining(){ return available() - spent(); }
+
+function canSelect(p){
+  if(p.points >= 0) return true;
+  return remaining() >= -p.points;
+}
+
+const el = id => document.getElementById(id);
+
+function buildCard(p){
+  const card = document.createElement('div');
+  card.className = 'card ' + p.group;
+  card.dataset.id = p.id;
+  const isGeneral = p.group === 'general';
+  const isSel = isGeneral || selected.has(p.id);
+  if(isSel) card.classList.add('selected');
+
+  let badge = '—';
+  if(p.points > 0) badge = '+' + p.points;
+  else if(p.points < 0) badge = p.points;
+
+  card.innerHTML =
+    '<div class="name">' + p.name + '</div>' +
+    '<div class="desc">' + p.desc + '</div>' +
+    '<div class="badge">' + badge + '</div>' +
+    '<div class="check"></div>';
+
+  if(!isGeneral){
+    if(p.points < 0 && !selected.has(p.id) && !canSelect(p)){
+      card.classList.add('disabled');
+    }
+    card.addEventListener('click', () => onToggle(p, card));
+  }
+  return card;
+}
+
+function onToggle(p, card){
+  if(selected.has(p.id)){
+    if(p.points > 0 && remaining() < p.points){
+      showToast('Сначала уберите положительные перки, чтобы снять «' + p.name + '»');
+      return;
+    }
+    selected.delete(p.id);
+  } else {
+    if(p.points < 0 && !canSelect(p)){
+      showToast('Не хватает поинтов для «' + p.name + '»');
+      return;
+    }
+    selected.add(p.id);
+  }
+  render();
+}
+
+function render(){
+  ['general','positive','negative'].forEach(g => {
+    const grid = el('grid-' + g);
+    grid.innerHTML = '';
+    PERKS.filter(p => p.group === g).forEach(p => grid.appendChild(buildCard(p)));
+  });
+
+  const rem = remaining();
+  el('pointsValue').textContent = rem;
+  el('pointsSub').textContent = 'накоплено ' + available() + ' / потрачено ' + spent();
+
+  const list = el('selList');
+  list.innerHTML = '';
+  if(selected.size === 0){
+    const li = document.createElement('li');
+    li.className = 'sel-empty';
+    li.textContent = 'Пока ничего не выбрано';
+    list.appendChild(li);
+  } else {
+    PERKS.filter(p => selected.has(p.id)).forEach(p => {
+      const li = document.createElement('li');
+      li.className = p.points < 0 ? 'pos' : 'neg';
+      const pts = p.points > 0 ? '+' + p.points : p.points;
+      li.innerHTML = '<span>' + p.name + '</span><span class="pts">' + pts + '</span>';
+      list.appendChild(li);
+    });
+  }
+}
+
+function showToast(msg){
+  const t = el('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(showToast._t);
+  showToast._t = setTimeout(() => t.classList.remove('show'), 1800);
+}
+
+el('btnReset').addEventListener('click', () => {
+  selected.clear();
+  render();
+});
+el('btnSave').addEventListener('click', () => {
+  localStorage.setItem(STORE_KEY, JSON.stringify([...selected]));
+  showToast('Билд сохранён');
+});
+
+render();
+</script>
+</body>
+</html>
