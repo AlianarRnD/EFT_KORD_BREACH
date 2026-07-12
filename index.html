@@ -280,7 +280,7 @@ function getBasePath(){
   var p = window.location.pathname.replace(/\/+$/, '');
   var parts = p.split('/');
   var idx = parts.indexOf('EFT_KORD_BREACH');
-  if(idx >= 0) return parts.slice(0, idx + 2).join('/') + '/';
+  if(idx >= 0) return parts.slice(0, idx + 1).join('/') + '/';
   return p.substring(0, p.lastIndexOf('/') + 1);
 }
 
@@ -389,6 +389,7 @@ function render(){
       list.appendChild(li);
     });
   }
+  updateURL();
 }
 
 function showToast(msg){
