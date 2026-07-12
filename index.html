@@ -98,7 +98,8 @@
   .card.positive.selected{border-color:var(--green);background:var(--green-dim);}
   .card.negative.selected{border-color:var(--red);background:var(--red-dim);}
   .card.disabled{opacity:.45;cursor:not-allowed;}
-  .card .name{font-weight:600;font-size:15px;margin-bottom:4px;padding-right:54px;}
+  .card .name{font-weight:600;font-size:15px;margin-bottom:4px;padding-right:54px;display:flex;align-items:center;gap:8px;}
+  .card .name .picon{width:34px;height:34px;border-radius:5px;flex-shrink:0;object-fit:cover;background:var(--panel2);border:1px solid var(--line);}
   .card .desc{font-size:12.5px;color:var(--muted);}
   .card .badge{
     position:absolute;
@@ -201,12 +202,12 @@
 
 <script>
 const PERKS = [
-  {id:'no_insurance', name:'НЕРАБОТАЮЩАЯ СТРАХОВКА', group:'general', points:0, desc:'Нельзя страховать предметы у торговцев.'},
-  {id:'deficit_armor', name:'ДЕФИЦИТ БРОНИ', group:'general', points:0, desc:'В Таркове наблюдается дефицит брони у торговцев.'},
-  {id:'black_division', name:'BLACK DIVISION', group:'general', points:0, desc:'Бойцы подразделения Black Division встречаются на локациях.'},
-  {id:'hideout_no_fir', name:'УБЕЖИЩЕ БЕЗ FIR', group:'general', points:0, desc:'Постройка модулей в Убежище не требуют статуса «Найдено в рейде» у предметов.'},
-  {id:'master', name:'НА ВСЕ РУКИ МАСТЕР', group:'general', points:0, desc:'Время крафта сокращено на 50%. Умение «Ручное производство» по умолчанию 51 уровня.'},
-  {id:'experienced_pmc', name:'ОПЫТНЫЕ ЧВК', group:'general', points:0, desc:'Персонаж получает на 25% больше опыта за рейд.'},
+  {id:'no_insurance', name:'НЕРАБОТАЮЩАЯ СТРАХОВКА', group:'general', points:0, icon:true, desc:'Нельзя страховать предметы у торговцев.'},
+  {id:'deficit_armor', name:'ДЕФИЦИТ БРОНИ', group:'general', points:0, icon:true, desc:'В Таркове наблюдается дефицит брони у торговцев.'},
+  {id:'black_division', name:'BLACK DIVISION', group:'general', points:0, icon:true, desc:'Бойцы подразделения Black Division встречаются на локациях.'},
+  {id:'hideout_no_fir', name:'УБЕЖИЩЕ БЕЗ FIR', group:'general', points:0, icon:true, desc:'Постройка модулей в Убежище не требуют статуса «Найдено в рейде» у предметов.'},
+  {id:'master', name:'НА ВСЕ РУКИ МАСТЕР', group:'general', points:0, icon:true, desc:'Время крафта сокращено на 50%. Умение «Ручное производство» по умолчанию 51 уровня.'},
+  {id:'experienced_pmc', name:'ОПЫТНЫЕ ЧВК', group:'general', points:0, icon:true, desc:'Персонаж получает на 25% больше опыта за рейд.'},
 
   {id:'locksmith', name:'МЕДВЕЖАТНИК', group:'positive', points:-6, desc:'При использовании механического ключа есть 20% шанс, что он не потеряет прочность.'},
   {id:'bushborn', name:'КУСТОРОЖДЕННЫЙ', group:'positive', points:-5, desc:'Задевание веток, травы и кустов вызывает на 50% меньше шума и замедления.'},
@@ -283,7 +284,7 @@ function buildCard(p){
   else if(p.points < 0) badge = p.points;
 
   card.innerHTML =
-    '<div class="name">' + p.name + '</div>' +
+    '<div class="name">' + (p.icon ? '<img class="picon" src="icons/' + p.id + '.png">' : '') + '<span>' + p.name + '</span></div>' +
     '<div class="desc">' + p.desc + '</div>' +
     '<div class="badge">' + badge + '</div>' +
     '<div class="check"></div>';
