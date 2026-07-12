@@ -44,7 +44,7 @@
     color:#fff;
   }
   header h1 span{color:var(--amber);}
-  .logo{height:42px;object-fit:contain;opacity:.9;}
+  .logo{height:64px;object-fit:contain;opacity:.9;}
   .counter{
     background:var(--panel2);
     border:1px solid var(--line);
@@ -106,6 +106,8 @@
   .pbody{flex:1;padding-right:40px;}
   .pname{font-weight:600;font-size:17px;margin-bottom:3px;}
   .pdesc{font-size:15px;color:var(--muted);line-height:1.5;}
+  .pconflict{font-size:12px;color:var(--red);margin-top:5px;line-height:1.4;}
+  .pconflict em{font-style:normal;font-weight:600;}
   .card .badge{
     position:absolute;
     top:10px;right:10px;
@@ -249,6 +251,20 @@ const PERKS = [
   {id:'no_flea', name:'НЕРАБОТАЮЩАЯ БАРАХОЛКА', group:'negative', points:6, icon:true, desc:'• Торговля на Барахолке с другими игроками недоступна.'}
 ];
 
+const CONFLICTS = {
+  strong_bones: ['osteoporosis'],
+  osteoporosis: ['strong_bones'],
+  thrombophilia: ['hemophilia'],
+  hemophilia: ['thrombophilia'],
+  hypodipsia: ['polydipsia'],
+  polydipsia: ['hypodipsia'],
+  polyphagia: ['fatigue'],
+  fatigue: ['polyphagia'],
+  marathon: ['exhaustion'],
+  youth: ['exhaustion'],
+  exhaustion: ['marathon', 'youth']
+};
+
 const STORE_KEY = 'kord_breach_build';
 const selected = new Set();
 
@@ -272,8 +288,13 @@ function spent(){
 function remaining(){ return available() - spent(); }
 
 function canSelect(p){
-  if(p.points >= 0) return true;
-  return remaining() >= -p.points;
+  if(p.points < 0 && remaining() < -p.points) return false;
+  if(CONFLICTS[p.id]){
+    for(var i=0;i<CONFLICTS[p.id].length;i++){
+      if(selected.has(CONFLICTS[p.id][i])) return false;
+    }
+  }
+  return true;
 }
 
 const posPerks = PERKS.filter(p => p.group === 'positive');
@@ -325,14 +346,27 @@ function buildCard(p){
   if(p.points > 0) badge = '+' + p.points;
   else if(p.points < 0) badge = p.points;
 
+  var conflictName = '';
+  if(CONFLICTS[p.id]){
+    for(var i=0;i<CONFLICTS[p.id].length;i++){
+      if(selected.has(CONFLICTS[p.id][i])){
+        var cp = perk(CONFLICTS[p.id][i]);
+        if(cp) conflictName = cp.name;
+        break;
+      }
+    }
+  }
+
   card.innerHTML =
     (p.icon ? '<img class="picon" src="icons/' + p.id + '.png">' : '') +
-    '<div class="pbody"><div class="pname">' + p.name + '</div><div class="pdesc">' + p.desc + '</div></div>' +
+    '<div class="pbody"><div class="pname">' + p.name + '</div><div class="pdesc">' + p.desc + '</div>' +
+    (conflictName ? '<div class="pconflict">Заблокирован выбранным:<br>• <em>' + conflictName + '</em></div>' : '') +
+    '</div>' +
     '<div class="badge">' + badge + '</div>' +
     '<div class="check"></div>';
 
   if(!isGeneral){
-    if(p.points < 0 && !selected.has(p.id) && !canSelect(p)){
+    if(!selected.has(p.id) && !canSelect(p)){
       card.classList.add('disabled');
     }
     card.addEventListener('click', () => onToggle(p, card));
@@ -348,7 +382,16 @@ function onToggle(p, card){
     }
     selected.delete(p.id);
   } else {
-    if(p.points < 0 && !canSelect(p)){
+    if(CONFLICTS[p.id]){
+      for(var i=0;i<CONFLICTS[p.id].length;i++){
+        if(selected.has(CONFLICTS[p.id][i])){
+          var cp = perk(CONFLICTS[p.id][i]);
+          showToast('«' + p.name + '» несовместим с «' + (cp ? cp.name : CONFLICTS[p.id][i]) + '»');
+          return;
+        }
+      }
+    }
+    if(p.points < 0 && remaining() < -p.points){
       showToast('Не хватает поинтов для «' + p.name + '»');
       return;
     }
