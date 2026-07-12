@@ -276,14 +276,6 @@ function canSelect(p){
 const posPerks = PERKS.filter(p => p.group === 'positive');
 const negPerks = PERKS.filter(p => p.group === 'negative');
 
-function getBasePath(){
-  var p = window.location.pathname.replace(/\/+$/, '');
-  var parts = p.split('/');
-  var idx = parts.indexOf('EFT_KORD_BREACH');
-  if(idx >= 0) return parts.slice(0, idx + 1).join('/') + '/';
-  return p.substring(0, p.lastIndexOf('/') + 1);
-}
-
 function updateURL(){
   var sp = [], sn = [];
   selected.forEach(function(id){
@@ -294,16 +286,16 @@ function updateURL(){
   });
   var posStr = sp.map(function(i){ return i.toString(36); }).join('');
   var negStr = sn.map(function(i){ return i.toString(36); }).join('');
-  var hash = (posStr || negStr) ? (posStr + '/' + negStr) : '';
-  var base = getBasePath();
-  try{ history.replaceState(null, '', hash ? (base + hash) : base); }catch(e){}
+  var hash = (posStr || negStr) ? '#' + posStr + '/' + negStr : '';
+  try{ history.replaceState(null, '', hash || window.location.pathname.replace(/\/+$/, '') + '/'); }catch(e){}
 }
 
 function initFromURL(){
-  var p = window.location.pathname.replace(/\/+$/g, '').split('/');
-  var idx = p.indexOf('EFT_KORD_BREACH');
-  if(idx < 0 || p.length < idx + 3) return;
-  var posStr = p[idx + 1], negStr = p[idx + 2];
+  var h = window.location.hash.replace(/^#/, '');
+  if(!h) return;
+  var parts = h.split('/');
+  if(parts.length !== 2) return;
+  var posStr = parts[0], negStr = parts[1];
   if(!posStr || !negStr) return;
   for(var i=0;i<posStr.length;i++){
     var n = parseInt(posStr[i], 36);
@@ -359,7 +351,6 @@ function onToggle(p, card){
     selected.add(p.id);
   }
   render();
-  updateURL();
 }
 
 function render(){
@@ -403,7 +394,11 @@ function showToast(msg){
 el('btnReset').addEventListener('click', () => {
   selected.clear();
   render();
-  updateURL();
+});
+window.addEventListener('hashchange', function(){
+  selected.clear();
+  initFromURL();
+  render();
 });
 el('btnSave').addEventListener('click', () => {
   localStorage.setItem(STORE_KEY, JSON.stringify([...selected]));
