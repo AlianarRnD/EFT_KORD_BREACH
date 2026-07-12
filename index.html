@@ -252,7 +252,6 @@ try{
   const saved = JSON.parse(localStorage.getItem(STORE_KEY) || '[]');
   saved.forEach(id => { if(PERKS.some(p=>p.id===id)) selected.add(id); });
 }catch(e){}
-initFromURL();
 
 function perk(id){ return PERKS.find(p=>p.id===id); }
 
@@ -275,6 +274,7 @@ function canSelect(p){
 
 const posPerks = PERKS.filter(p => p.group === 'positive');
 const negPerks = PERKS.filter(p => p.group === 'negative');
+initFromURL();
 
 function updateURL(){
   var sp = [], sn = [];
