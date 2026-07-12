@@ -45,17 +45,8 @@
   }
   header h1 span{color:var(--amber);}
   .logo{height:64px;object-fit:contain;opacity:.9;}
-  .counter{
-    background:var(--panel2);
-    border:1px solid var(--line);
-    border-radius:8px;
-    padding:10px 16px;
-    text-align:center;
-    min-width:200px;
-  }
-  .counter .label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;}
-  .counter .value{font-size:28px;font-weight:700;color:var(--amber);}
-  .counter .sub{font-size:11px;color:var(--muted);}
+  .pts-grn{color:var(--green);font-weight:700;}
+  .pts-red{color:var(--red);font-weight:700;}
   .layout{
     display:grid;
     grid-template-columns:1fr 380px;
@@ -129,6 +120,7 @@
   }
   .card.selected .check{background:var(--amber);border-color:var(--amber);}
   .card.general .check{background:var(--amber);border-color:var(--amber);}
+  .card.disabled .check{background:var(--red);border-color:var(--red);}
 
   aside{
     background:var(--panel);
@@ -169,11 +161,6 @@
 <header>
   <h1>KORD <span>BREACH</span> — Калькулятор билдов</h1>
   <img class="logo" src="logo.png" alt="">
-  <div class="counter">
-    <div class="label">Доступно поинтов</div>
-    <div class="value" id="pointsValue">0</div>
-    <div class="sub" id="pointsSub">накоплено 0 / потрачено 0</div>
-  </div>
 </header>
 
 <div class="layout">
@@ -193,7 +180,7 @@
   </main>
 
   <aside>
-    <h2>Выбранные перки</h2>
+    <h2 id="selHeading">Выбранные перки</h2>
     <ul class="sel-list" id="selList"></ul>
     <div class="btns">
       <button id="btnReset">Сбросить</button>
@@ -408,8 +395,10 @@ function render(){
   });
 
   const rem = remaining();
-  el('pointsValue').textContent = rem;
-  el('pointsSub').textContent = 'накоплено ' + available() + ' / потрачено ' + spent();
+  const h = el('selHeading');
+  if(rem > 0) h.innerHTML = 'Выбранные перки <span class="pts-grn">+' + rem + '</span>';
+  else if(rem < 0) h.innerHTML = 'Выбранные перки <span class="pts-red">' + rem + '</span>';
+  else h.innerHTML = 'Выбранные перки';
 
   const list = el('selList');
   list.innerHTML = '';
