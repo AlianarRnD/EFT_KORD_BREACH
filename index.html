@@ -120,7 +120,7 @@
   }
   .card.selected .check{background:var(--amber);border-color:var(--amber);}
   .card.general .check{background:var(--amber);border-color:var(--amber);}
-  .card.disabled .check{background:var(--red);border-color:var(--red);}
+  .card.conflict .check{background:var(--red);border-color:var(--red);}
 
   aside{
     background:var(--panel);
@@ -356,6 +356,7 @@ function buildCard(p){
     if(!selected.has(p.id) && !canSelect(p)){
       card.classList.add('disabled');
     }
+    if(conflictName) card.classList.add('conflict');
     card.addEventListener('click', () => onToggle(p, card));
   }
   return card;
