@@ -105,7 +105,7 @@
   .picon{width:80px;height:80px;border-radius:8px;object-fit:cover;flex-shrink:0;background:var(--panel2);border:1px solid var(--line);}
   .pbody{flex:1;padding-right:40px;}
   .pname{font-weight:600;font-size:17px;margin-bottom:3px;}
-  .pdesc{font-size:15px;color:var(--muted);}
+  .pdesc{font-size:15px;color:var(--muted);line-height:1.5;}
   .card .badge{
     position:absolute;
     top:10px;right:10px;
@@ -216,37 +216,37 @@ const PERKS = [
   {id:'master', name:'НА ВСЕ РУКИ МАСТЕР', group:'general', points:0, icon:true, desc:'Время крафта сокращено на 50%. Умение «Ручное производство» по умолчанию 51 уровня.'},
   {id:'experienced_pmc', name:'ОПЫТНЫЕ ЧВК', group:'general', points:0, icon:true, desc:'Персонаж получает на 25% больше опыта за рейд.'},
 
-  {id:'locksmith', name:'МЕДВЕЖАТНИК', group:'positive', points:-6, desc:'При использовании механического ключа есть 20% шанс, что он не потеряет прочность.'},
-  {id:'bushborn', name:'КУСТОРОЖДЕННЫЙ', group:'positive', points:-5, desc:'Задевание веток, травы и кустов вызывает на 50% меньше шума и замедления.'},
-  {id:'juice', name:'THE JUICE TIME', group:'positive', points:-2, desc:'При употреблении соков вы получаете эффект «На болеутоляющих» на 60 секунд.'},
-  {id:'businessman', name:'БИЗНЕСМЕН', group:'positive', points:-1, desc:'Один раз в неделю вы получаете откаты за крышевание над некоторыми Дикими.'},
-  {id:'sailor', name:'НОСТАЛЬГИЯ МОРЯКА', group:'positive', points:-2, desc:'При употреблении рыбных консервов персонаж получает эффект «Регенерация здоровья» (+2) на 10 секунд.'},
-  {id:'tarkov_shooter', name:'ТАРКОВСКИЙ СТРЕЛОК', group:'positive', points:-3, desc:'Увеличивает скорость прокачки навыков болтовых винтовок на 100%. Стартовое значение умения «Болтовые винтовки» — 10 уровень.'},
-  {id:'youth', name:'МОЛОДОСТЬ', group:'positive', points:-3, desc:'Энергия тратится на 20% медленнее. Выносливость рук и ног выше на 10 единиц.'},
-  {id:'diet', name:'ДИЕТА', group:'positive', points:-1, desc:'Трата ресурса всей провизии меньше на 50%.'},
-  {id:'hercules', name:'ГЕРКУЛЕС', group:'positive', points:-3, desc:'Стартовая «Сила» и «Выносливость» выше на 15 уровней.'},
-  {id:'hypodipsia', name:'ГИПОДИПСИЯ', group:'positive', points:-2, desc:'Гидратация тратится на 15% медленнее.'},
-  {id:'middle', name:'СЕРЕДНЯЧОК', group:'positive', points:-10, desc:'Все умения со старта 25 уровня. Максимальный уровень всех умений — 25.'},
-  {id:'sprinter', name:'СПРИНТЕР', group:'positive', points:-2, desc:'Скорость бега персонажа выше на 5%.'},
-  {id:'polyphagia', name:'ПОЛИФАГИЯ', group:'positive', points:-2, desc:'Энергия тратится на 15% медленнее.'},
-  {id:'kappa', name:'KAPPA PROTOCOL', group:'positive', points:-21, desc:'Вы получаете Защищенный контейнер «Каппа» со старта.'},
-  {id:'thrombophilia', name:'ТРОМБОФИЛИЯ', group:'positive', points:-2, desc:'Шанс получить кровотечение уменьшается на 25%.'},
-  {id:'strong_bones', name:'КРЕПКИЕ КОСТИ', group:'positive', points:-3, desc:'Шанс сломать любую из конечностей уменьшается на 15%. Падение с высоты наносит на 15% меньше урона.'},
-  {id:'marathon', name:'МАРАФОНЕЦ', group:'positive', points:-3, desc:'Выносливость рук и ног тратится на 15% медленнее.'},
+  {id:'locksmith', name:'МЕДВЕЖАТНИК', group:'positive', points:-6, icon:true, desc:'• При использовании механического ключа есть 20% шанс, что он не потеряет прочность.'},
+  {id:'bushborn', name:'КУСТОРОЖДЕННЫЙ', group:'positive', points:-5, icon:true, desc:'• Задевание веток, травы и кустов вызывает на 50% меньше шума и замедления.'},
+  {id:'juice', name:'THE JUICE TIME', group:'positive', points:-2, icon:true, desc:'• При употреблении соков вы получаете эффект «На болеутоляющих» на 60 секунд.'},
+  {id:'businessman', name:'БИЗНЕСМЕН', group:'positive', points:-1, icon:true, desc:'• Один раз в неделю вы получаете откаты за крышевание над некоторыми Дикими.'},
+  {id:'sailor', name:'НОСТАЛЬГИЯ МОРЯКА', group:'positive', points:-2, icon:true, desc:'• При употреблении рыбных консервов персонаж получает эффект «Регенерация здоровья» (+2) на 10 секунд.'},
+  {id:'tarkov_shooter', name:'ТАРКОВСКИЙ СТРЕЛОК', group:'positive', points:-3, icon:true, desc:'• Увеличивает скорость прокачки навыков болтовых винтовок на 100%.<br>• Стартовое значение умения «Болтовые винтовки» — 10 уровень.'},
+  {id:'youth', name:'МОЛОДОСТЬ', group:'positive', points:-3, icon:true, desc:'• Энергия тратится на 20% медленнее.<br>• Выносливость рук и ног выше на 10 единиц.'},
+  {id:'diet', name:'ДИЕТА', group:'positive', points:-1, icon:true, desc:'• Трата ресурса всей провизии меньше на 50%.'},
+  {id:'hercules', name:'ГЕРКУЛЕС', group:'positive', points:-3, icon:true, desc:'• Стартовая «Сила» и «Выносливость» выше на 15 уровней.'},
+  {id:'hypodipsia', name:'ГИПОДИПСИЯ', group:'positive', points:-2, icon:true, desc:'• Гидратация тратится на 15% медленнее.'},
+  {id:'middle', name:'СЕРЕДНЯЧОК', group:'positive', points:-10, icon:true, desc:'• Все умения со старта 25 уровня.<br>• Максимальный уровень всех умений — 25.'},
+  {id:'sprinter', name:'СПРИНТЕР', group:'positive', points:-2, icon:true, desc:'• Скорость бега персонажа выше на 5%.'},
+  {id:'polyphagia', name:'ПОЛИФАГИЯ', group:'positive', points:-2, icon:true, desc:'• Энергия тратится на 15% медленнее.'},
+  {id:'kappa', name:'KAPPA PROTOCOL', group:'positive', points:-21, icon:true, desc:'• Вы получаете Защищенный контейнер «Каппа» со старта.'},
+  {id:'thrombophilia', name:'ТРОМБОФИЛИЯ', group:'positive', points:-2, icon:true, desc:'• Шанс получить кровотечение уменьшается на 25%.'},
+  {id:'strong_bones', name:'КРЕПКИЕ КОСТИ', group:'positive', points:-3, icon:true, desc:'• Шанс сломать любую из конечностей уменьшается на 15%.<br>• Падение с высоты наносит на 15% меньше урона.'},
+  {id:'marathon', name:'МАРАФОНЕЦ', group:'positive', points:-3, icon:true, desc:'• Выносливость рук и ног тратится на 15% медленнее.'},
 
-  {id:'osteoporosis', name:'ОСТЕОПОРОЗ', group:'negative', points:3, desc:'Шанс сломать любую конечность выше на 15%. Падение с высоты наносит на 15% больше урона.'},
-  {id:'ouch', name:'АЙ, БОЛИТ!', group:'negative', points:2, desc:'Ресурс всех аптечек тратится на 25% сильнее.'},
-  {id:'fatigue', name:'СИНДРОМ ХРОНИЧЕСКОЙ УСТАЛОСТИ', group:'negative', points:1, desc:'Энергия тратится на 15% быстрее.'},
-  {id:'allergic', name:'АЛЛЕРГИК', group:'negative', points:3, desc:'У персонажа есть аллергия на 2 случайных предмета из провизии или медицинских препаратов.'},
-  {id:'vanity', name:'БОЛЬШОЕ ДОСТОИНСТВО', group:'negative', points:1, desc:'Скорость бега меньше на 1%. Стоимость предметов у Терапевта меньше на 5%.'},
-  {id:'hemophilia', name:'ГЕМОФИЛИЯ', group:'negative', points:2, desc:'Шанс получить кровотечение увеличивается на 25%.'},
-  {id:'unteachable', name:'НЕОБУЧАЕМЫЙ', group:'negative', points:4, desc:'Получение опыта для умений уменьшено на 25% (кроме умения «Болтовые Винтовки»). Максимальный уровень умений 30 (кроме умения «Ручное производство»).'},
-  {id:'nosenose', name:'КАРЛИК НОС', group:'negative', points:2, desc:'Умение «Харизма» не прокачивается. Стоимость ассортимента всех торговцев выше на 20%.'},
-  {id:'exhaustion', name:'ИСТОЩЕНИЕ', group:'negative', points:4, desc:'Выносливость рук и ног восстанавливается на 15% медленнее. Выносливость рук и ног меньше на 10 единиц.'},
-  {id:'polydipsia', name:'ПОЛИДИПСИЯ', group:'negative', points:1, desc:'Гидратация тратится на 15% быстрее.'},
-  {id:'doctor', name:'ДОКТОР ДЖЕКИЛ', group:'negative', points:1, desc:'Эффект «Свежие раны» остается до конца рейда.'},
-  {id:'broken_kappa', name:'СЛОМАННЫЙ ЗАЩИЩЁННЫЙ КОНТЕЙНЕР', group:'negative', points:4, desc:'Защищенный контейнер ограничен деньгами, ключами, жетонами, спецоборудованием и некоторыми контейнерами.'},
-  {id:'no_flea', name:'НЕРАБОТАЮЩАЯ БАРАХОЛКА', group:'negative', points:6, desc:'Торговля на Барахолке с другими игроками недоступна.'}
+  {id:'osteoporosis', name:'ОСТЕОПОРОЗ', group:'negative', points:3, icon:true, desc:'• Шанс сломать любую конечность выше на 15%.<br>• Падение с высоты наносит на 15% больше урона.'},
+  {id:'ouch', name:'АЙ, БОЛИТ!', group:'negative', points:2, icon:true, desc:'• Ресурс всех аптечек тратится на 25% сильнее.'},
+  {id:'fatigue', name:'СИНДРОМ ХРОНИЧЕСКОЙ УСТАЛОСТИ', group:'negative', points:1, icon:true, desc:'• Энергия тратится на 15% быстрее.'},
+  {id:'allergic', name:'АЛЛЕРГИК', group:'negative', points:3, icon:true, desc:'• У персонажа есть аллергия на 2 случайных предмета из провизии или медицинских препаратов.'},
+  {id:'vanity', name:'БОЛЬШОЕ ДОСТОИНСТВО', group:'negative', points:1, icon:true, desc:'• Скорость бега меньше на 1%.<br>• Стоимость предметов у Терапевта меньше на 5%.'},
+  {id:'hemophilia', name:'ГЕМОФИЛИЯ', group:'negative', points:2, icon:true, desc:'• Шанс получить кровотечение увеличивается на 25%.'},
+  {id:'unteachable', name:'НЕОБУЧАЕМЫЙ', group:'negative', points:4, icon:true, desc:'• Получение опыта для умений уменьшено на 25% (кроме умения «Болтовые Винтовки»).<br>• Максимальный уровень умений 30 (кроме умения «Ручное производство»).'},
+  {id:'nosenose', name:'КАРЛИК НОС', group:'negative', points:2, icon:true, desc:'• Умение «Харизма» не прокачивается.<br>• Стоимость ассортимента всех торговцев выше на 20%.'},
+  {id:'exhaustion', name:'ИСТОЩЕНИЕ', group:'negative', points:4, icon:true, desc:'• Выносливость рук и ног восстанавливается на 15% медленнее.<br>• Выносливость рук и ног меньше на 10 единиц.'},
+  {id:'polydipsia', name:'ПОЛИДИПСИЯ', group:'negative', points:1, icon:true, desc:'• Гидратация тратится на 15% быстрее.'},
+  {id:'doctor', name:'ДОКТОР ДЖЕКИЛ', group:'negative', points:1, icon:true, desc:'• Эффект «Свежие раны» остается до конца рейда.'},
+  {id:'broken_kappa', name:'СЛОМАННЫЙ ЗАЩИЩЁННЫЙ КОНТЕЙНЕР', group:'negative', points:4, icon:true, desc:'• Защищенный контейнер ограничен деньгами, ключами, жетонами, спецоборудованием и некоторыми контейнерами.'},
+  {id:'no_flea', name:'НЕРАБОТАЮЩАЯ БАРАХОЛКА', group:'negative', points:6, icon:true, desc:'• Торговля на Барахолке с другими игроками недоступна.'}
 ];
 
 const STORE_KEY = 'kord_breach_build';
