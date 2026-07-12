@@ -92,6 +92,9 @@
     position:relative;
     transition:border-color .15s,background .15s,transform .05s;
     user-select:none;
+    display:flex;
+    gap:14px;
+    align-items:flex-start;
   }
   .card:hover{border-color:#3d4753;}
   .card.general{cursor:default;background:var(--panel2);}
@@ -99,9 +102,10 @@
   .card.positive.selected{border-color:var(--green);background:var(--green-dim);}
   .card.negative.selected{border-color:var(--red);background:var(--red-dim);}
   .card.disabled{opacity:.45;cursor:not-allowed;}
-  .card .name{font-weight:600;font-size:17px;margin-bottom:4px;padding-right:54px;display:flex;align-items:center;gap:10px;}
-  .card .name .picon{width:48px;height:48px;border-radius:6px;flex-shrink:0;object-fit:cover;background:var(--panel2);border:1px solid var(--line);}
-  .card .desc{font-size:15px;color:var(--muted);}
+  .picon{width:80px;height:80px;border-radius:8px;object-fit:cover;flex-shrink:0;background:var(--panel2);border:1px solid var(--line);}
+  .pbody{flex:1;padding-right:40px;}
+  .pname{font-weight:600;font-size:17px;margin-bottom:3px;}
+  .pdesc{font-size:15px;color:var(--muted);}
   .card .badge{
     position:absolute;
     top:10px;right:10px;
@@ -322,8 +326,8 @@ function buildCard(p){
   else if(p.points < 0) badge = p.points;
 
   card.innerHTML =
-    '<div class="name">' + (p.icon ? '<img class="picon" src="icons/' + p.id + '.png">' : '') + '<span>' + p.name + '</span></div>' +
-    '<div class="desc">' + p.desc + '</div>' +
+    (p.icon ? '<img class="picon" src="icons/' + p.id + '.png">' : '') +
+    '<div class="pbody"><div class="pname">' + p.name + '</div><div class="pdesc">' + p.desc + '</div></div>' +
     '<div class="badge">' + badge + '</div>' +
     '<div class="check"></div>';
 
